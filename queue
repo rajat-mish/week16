@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class MyCircularDeque {
+private:
+    vector<int> deque;
+    int front, rear, size;
+    
+public:
+    MyCircularDeque(int k) {
+        deque.resize(k);
+        front = 0;
+        rear = 0;
+        size = k;
+    }
+    
+    bool insertFront(int value) {
+        if (isFull()) return false;
+        front = (front - 1 + size) % size;  // Move front pointer
+        deque[front] = value;
+        return true;
+    }
+    
+    bool insertLast(int value) {
+        if (isFull()) return false;
+        deque[rear] = value;
+        rear = (rear + 1) % size;  // Move rear pointer
+        return true;
+    }
+    
+    bool deleteFront() {
+        if (isEmpty()) return false;
+        front = (front + 1) % size;  // Move front pointer
+        return true;
+    }
+    
+    bool deleteLast() {
+        if (isEmpty()) return false;
+        rear = (rear - 1 + size) % size;  // Move rear pointer
+        return true;
+    }
+    
+    int getFront() {
+        if (isEmpty()) return -1;
+        return deque[front];
+    }
+    
+    int getRear() {
+        if (isEmpty()) return -1;
+        return deque[(rear - 1 + size) % size];  // Adjust for circular behavior
+    }
+    
+    bool isEmpty() {
+        return front == rear;
+    }
+    
+    bool isFull() {
