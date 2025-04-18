@@ -1,0 +1,110 @@
+//ques 1
+
+
+#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+vector<int> nextLargerNodes(ListNode* head) {
+    vector<int> result;
+    stack<pair<int, int>> st;  // Pair of <index, value>
+    ListNode* curr = head;
+    int index = 0;
+    
+    while (curr) {
+        result.push_back(curr->val);
+        curr = curr->next;
+        index++;
+    }
+    
+    for (int i = 0; i < result.size(); i++) {
+        while (!st.empty() && result[i] > st.top().second) {
+            result[st.top().first] = result[i];
+            st.pop();
+        }
+        st.push({i, result[i]});
+    }
+    
+    return result;
+}
+
+int main() {
+    ListNode* head = new ListNode(2);
+    head->next = new ListNode(1);
+    head->next->next = new ListNode(5);
+    
+    vector<int> result = nextLargerNodes(head);
+    for (int val : result) {
+        cout << val << " ";
+    }
+    return 0;
+}
+
+
+//ques 2
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> finalPrices(vector<int>& prices) {
+    int n = prices.size();
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (prices[j] <= prices[i]) {
+                prices[i] -= prices[j];
+                break;
+            }
+        }
+    }
+    return prices;
+}
+
+int main() {
+    vector<int> prices = {8, 4, 6, 2, 3};
+    vector<int> result = finalPrices(prices);
+    for (int val : result) {
+        cout << val << " ";
+    }
+    return 0;
+}
+
+
+
+//ques 3
+
+#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+vector<int> nextGreaterElements(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> result(n, -1);
+    stack<int> st;
+    
+    for (int i = 0; i < 2 * n; i++) {
+        while (!st.empty() && nums[st.top()] < nums[i % n]) {
+            result[st.top()] = nums[i % n];
+            st.pop();
+        }
+        st.push(i % n);
+    }
+    
+    return result;
+}
+
+int main() {
+    vector<int> nums = {1, 2, 1};
+    vector<int> result = nextGreaterElements(nums);
+    for (int val : result) {
+        cout << val << " ";
+    }
+    return 0;
+}
